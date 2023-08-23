@@ -1,0 +1,5 @@
+[toolchain]
+components = ["rustfmt", "rustc-dev", "clippy"]
+targets = ["aarch64-unknown-uefi", "i686-unknown-uefi", "x86_64-unknown-uefi"]
+profile = "minimal"
+channel = "stable-2023-08-03"
