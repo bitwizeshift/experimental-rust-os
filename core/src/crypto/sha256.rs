@@ -1,6 +1,8 @@
 //! This module provides utilities for implementing SHA256 1-way hashing.
 //!
 
+use crate::crypto::{DigestErrorKind, ParseDigestError};
+
 /// A 32-byte SHA256 digest, which contains the state of a SHA256 hash
 /// operation.
 ///
@@ -9,39 +11,6 @@
 #[derive(PartialEq, Eq, PartialOrd, Ord)]
 #[repr(align(16))]
 pub struct Digest([u8; 32]);
-
-#[derive(Clone, Copy)]
-enum DigestErrorKind {
-  BadChar(char),
-  BadLength(usize),
-}
-
-/// An error raised when attempting to convert a [`str`] into a [`Digest`].
-#[derive(Clone, Copy)]
-pub struct ParseDigestError(DigestErrorKind);
-
-impl core::fmt::Display for ParseDigestError {
-  fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-    match &self.0 {
-      DigestErrorKind::BadChar(ch) => write!(
-        f,
-        "bad character in digest string; '{}' is not hexadecimal",
-        ch
-      ),
-      DigestErrorKind::BadLength(len) => write!(
-        f,
-        "bad length of digest string; expected 64-chars, found {}",
-        len
-      ),
-    }
-  }
-}
-
-impl core::fmt::Debug for ParseDigestError {
-  fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-    <Self as core::fmt::Display>::fmt(&self, f)
-  }
-}
 
 impl Digest {
   /// Constructs a [`Digest`] containing only zero values.
