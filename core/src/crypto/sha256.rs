@@ -3,6 +3,8 @@
 
 use crate::crypto::{DigestErrorKind, ParseDigestError};
 
+use super::{Hashable, Hasher};
+
 /// A 32-byte SHA256 digest, which contains the state of a SHA256 hash
 /// operation.
 ///
@@ -426,6 +428,30 @@ impl super::Hasher for SHA256 {
   }
 }
 
+/// Hash the input byte sequence and return a SHA256 [`Digest`] representing
+/// the hashed bytes.
+///
+/// # Arguments
+///
+/// * `bytes` - a slice of bytes to hash
+pub fn hash_bytes(bytes: &[u8]) -> Digest {
+  let mut hasher = SHA256::new();
+  hasher.update(bytes);
+  hasher.digest()
+}
+
+/// Hash the object and return a SHA256 [`Digest`] representing this hashed
+/// object.
+///
+/// # Arguments
+///
+/// * `obj` - the object to hash
+pub fn hash<T: Hashable>(obj: T) -> Digest {
+  let mut hasher = SHA256::new();
+  obj.update_hash(&mut hasher);
+  hasher.digest()
+}
+
 mod test {
 
   #[test]
@@ -435,6 +461,26 @@ mod test {
 
     let mut hasher = sha256::SHA256::new();
     hasher.update(b"Hello, world!");
+
+    let digest = hasher.digest();
+    let expect = unsafe {
+      sha256::Digest::from_str_unchecked(
+        "315f5bdb76d078c43b8ac0064e4a0164612b1fce77c869345bfc94c75894edd3",
+      )
+    };
+
+    assert_eq!(digest, expect);
+  }
+
+  #[test]
+  fn sha256_input_less_than_block_size_multiple_parts() {
+    use crate::crypto::sha256;
+    use crate::crypto::Hasher;
+
+    let mut hasher = sha256::SHA256::new();
+    hasher.update(b"Hello");
+    hasher.update(b", ");
+    hasher.update(b"world!");
 
     let digest = hasher.digest();
     let expect = unsafe {
@@ -467,6 +513,27 @@ mod test {
   }
 
   #[test]
+  fn sha256_input_greater_than_block_size_multiple_parts() {
+    use crate::crypto::sha256;
+    use crate::crypto::Hasher;
+
+    let input = br#"consectetur adipiscing elit. Sed faucibus magna sed ipsum malesuada ornare. Nunc accumsan id nibh in congue. Praesent placerat feugiat sem sed auctor. Etiam a cursus magna, vel dictum neque. Aliquam erat volutpat. Fusce rhoncus nisl facilisis, viverra eros a, sodales libero. Pellentesque pellentesque nunc sit amet ex congue aliquet. Suspendisse vel dui ac dui convallis faucibus. Donec semper mi eu mollis sagittis. Maecenas tempor nibh congue lectus pretium iaculis. Proin vitae massa sed justo euismod suscipit ac ut turpis. Vivamus leo metus, accumsan ac risus vel, tempor faucibus tellus."#;
+
+    let mut hasher = sha256::SHA256::new();
+    hasher.update(b"Lorem ipsum dolor sit amet");
+    hasher.update(b", ");
+    hasher.update(input);
+
+    let digest = hasher.digest();
+    let expect = unsafe {
+      sha256::Digest::from_str_unchecked(
+        "9802ab88834314ec41abcd75326e7e3007d55a4ff80ff0355c52e992a0e06582",
+      )
+    };
+
+    assert_eq!(digest, expect);
+  }
+  #[test]
   fn sha256_input_exact_block_length() {
     use crate::crypto::sha256;
     use crate::crypto::Hasher;
@@ -475,6 +542,26 @@ mod test {
 
     let mut hasher = sha256::SHA256::new();
     hasher.update(input);
+
+    let digest = hasher.digest();
+    let expect = unsafe {
+      sha256::Digest::from_str_unchecked(
+        "43ad7ee7440e29047288790007180beb6bba6a667579f055e9dcdca221e4161d",
+      )
+    };
+
+    assert_eq!(digest, expect);
+  }
+
+  #[test]
+  fn sha256_input_exact_block_length_multiple_parts() {
+    use crate::crypto::sha256;
+    use crate::crypto::Hasher;
+
+    let mut hasher = sha256::SHA256::new();
+    hasher.update(b"Lorem ipsum dolor sit amet");
+    hasher.update(b", ");
+    hasher.update(b"consectetur adipiscing elit. Sed at.");
 
     let digest = hasher.digest();
     let expect = unsafe {
