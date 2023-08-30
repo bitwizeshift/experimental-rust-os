@@ -271,6 +271,7 @@ pub fn hash<T: Hashable>(obj: T) -> Digest {
   hasher.digest()
 }
 
+#[cfg(test)]
 mod test {
 
   #[test]
