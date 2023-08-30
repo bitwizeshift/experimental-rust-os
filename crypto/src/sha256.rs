@@ -1,7 +1,7 @@
 //! This module provides utilities for implementing SHA256 1-way hashing.
 //!
 
-use crate::crypto::{FixedDigest, Hashable, Hasher};
+use crate::{FixedDigest, Hashable, Hasher};
 
 /// A 32-byte SHA256 digest, which contains the state of a SHA256 hash
 /// operation.
@@ -275,8 +275,8 @@ mod test {
 
   #[test]
   fn sha256_input_less_than_block_size() {
-    use crate::crypto::sha256;
-    use crate::crypto::Hasher;
+    use crate::sha256;
+    use crate::Hasher;
 
     let mut hasher = sha256::SHA256::new();
     hasher.update(b"Hello, world!");
@@ -293,8 +293,8 @@ mod test {
 
   #[test]
   fn sha256_input_less_than_block_size_multiple_parts() {
-    use crate::crypto::sha256;
-    use crate::crypto::Hasher;
+    use crate::sha256;
+    use crate::Hasher;
 
     let mut hasher = sha256::SHA256::new();
     hasher.update(b"Hello");
@@ -313,8 +313,8 @@ mod test {
 
   #[test]
   fn sha256_input_greater_than_block_size() {
-    use crate::crypto::sha256;
-    use crate::crypto::Hasher;
+    use crate::sha256;
+    use crate::Hasher;
 
     let input = br#"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed faucibus magna sed ipsum malesuada ornare. Nunc accumsan id nibh in congue. Praesent placerat feugiat sem sed auctor. Etiam a cursus magna, vel dictum neque. Aliquam erat volutpat. Fusce rhoncus nisl facilisis, viverra eros a, sodales libero. Pellentesque pellentesque nunc sit amet ex congue aliquet. Suspendisse vel dui ac dui convallis faucibus. Donec semper mi eu mollis sagittis. Maecenas tempor nibh congue lectus pretium iaculis. Proin vitae massa sed justo euismod suscipit ac ut turpis. Vivamus leo metus, accumsan ac risus vel, tempor faucibus tellus."#;
 
@@ -333,8 +333,8 @@ mod test {
 
   #[test]
   fn sha256_input_greater_than_block_size_multiple_parts() {
-    use crate::crypto::sha256;
-    use crate::crypto::Hasher;
+    use crate::sha256;
+    use crate::Hasher;
 
     let input = br#"consectetur adipiscing elit. Sed faucibus magna sed ipsum malesuada ornare. Nunc accumsan id nibh in congue. Praesent placerat feugiat sem sed auctor. Etiam a cursus magna, vel dictum neque. Aliquam erat volutpat. Fusce rhoncus nisl facilisis, viverra eros a, sodales libero. Pellentesque pellentesque nunc sit amet ex congue aliquet. Suspendisse vel dui ac dui convallis faucibus. Donec semper mi eu mollis sagittis. Maecenas tempor nibh congue lectus pretium iaculis. Proin vitae massa sed justo euismod suscipit ac ut turpis. Vivamus leo metus, accumsan ac risus vel, tempor faucibus tellus."#;
 
@@ -354,8 +354,8 @@ mod test {
   }
   #[test]
   fn sha256_input_exact_block_length() {
-    use crate::crypto::sha256;
-    use crate::crypto::Hasher;
+    use crate::sha256;
+    use crate::Hasher;
     let input =
       b"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at.";
 
@@ -374,8 +374,8 @@ mod test {
 
   #[test]
   fn sha256_input_exact_block_length_multiple_parts() {
-    use crate::crypto::sha256;
-    use crate::crypto::Hasher;
+    use crate::sha256;
+    use crate::Hasher;
 
     let mut hasher = sha256::SHA256::new();
     hasher.update(b"Lorem ipsum dolor sit amet");

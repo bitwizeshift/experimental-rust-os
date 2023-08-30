@@ -1,5 +1,10 @@
 //! This module provides some cryptographic primitives such as 1-way hashes like
 //! SHA256.
+#![no_std]
+
+// use core::hash::Hash;
+// pub mod md5;
+// pub mod merkle;
 pub mod sha256;
 
 #[derive(Clone, Copy)]
@@ -162,7 +167,7 @@ impl<const N: usize> FixedDigest<N> {
   /// Basic usage:
   ///
   /// ```rust
-  /// # use core::crypto::FixedDigest;
+  /// # use crypto::FixedDigest;
   /// let digest = unsafe {
   ///   // Digest for "Hello, world!"
   ///   FixedDigest::<32>::from_str_unchecked("315f5bdb76d078c43b8ac0064e4a0164612b1fce77c869345bfc94c75894edd3")
@@ -197,11 +202,11 @@ impl<const N: usize> FixedDigest<N> {
   /// Basic usage:
   ///
   /// ```rust
-  /// # use core::crypto::FixedDigest;
-  /// let sha = "invalid"
+  /// # use crypto::FixedDigest;
+  /// let sha = "invalid";
   /// let digest = FixedDigest::<32>::from_str(sha);
   ///
-  /// assert!(sha.is_err());
+  /// assert!(digest.is_err());
   /// ```
   pub fn from_str(s: &str) -> Result<Self, ParseDigestError> {
     if s.len() != 2 * N {
