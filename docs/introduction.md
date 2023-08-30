@@ -1,8 +1,12 @@
 # Introduction
 
 **No Name OS** is an exploratory and hobby OS project written in [Rust] which
-aims to rethink the way Operating Systems work from its foundations. There are
-several important goals that this intends to explore:
+aims to rethink the way Operating Systems work from its foundations.
+
+## Planned Features
+
+**Note:** This is largely a wish-list of what will be implemented, and is not
+necessarily implemented yet.
 
 * **Enhanced cryptographic-security**
   * **[Secure Boot]** from the Bootloader into the kernel.
@@ -21,7 +25,14 @@ several important goals that this intends to explore:
   * **Format Registry** is used to communicate shared-formats between binaries,
     and is extensible for newer communicable formats.
 * **Linking and Loading**
-  * **Applications** live in scoped-registries
+  * **Applications** live in scoped-registries.
+  * **Execution** offers alternative non-standard entry-point for applications
+    which provide contextual information for the operating-system (experimental).
+* **Kernel**
+  * **Hybrid-design** which follows micro-kernel philosophy but with
+    kernel-rooted subsystems.
+  * **Multi-Kernel** support, leveraged for in-memory upgrades and rollback,
+    which avoids the need for reboots.
 
 [Rust]: https://rustlang.org
 [Merkle Trees]: https://en.wikipedia.org/wiki/Merkle_tree
