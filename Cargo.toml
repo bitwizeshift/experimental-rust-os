@@ -1,0 +1,11 @@
+[workspace]
+members = [
+  "crypto",
+]
+
+# Profile settings below are to not require the "eh_personality" to be set.
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
