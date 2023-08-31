@@ -13,7 +13,7 @@ pub(crate) enum DigestErrorKind {
   BadLength(usize),
 }
 
-/// An error raised when attempting to convert a [`str`] into a [`Digest`].
+/// An error raised when attempting to convert a [`str`] into a [`FixedDigest`].
 #[derive(Clone, Copy)]
 pub struct ParseDigestError(pub(crate) DigestErrorKind);
 
@@ -139,7 +139,7 @@ impl<T: Hashable> Hashable for [T] {
 pub struct FixedDigest<const N: usize>([u8; N]);
 
 impl<const N: usize> FixedDigest<N> {
-  /// Constructs a [`Digest`] containing only zero values.
+  /// Constructs a [`FixedDigest`] containing only zero values.
   #[inline(always)]
   const fn zeroed() -> Self {
     Self([0; N])
@@ -159,8 +159,8 @@ impl<const N: usize> FixedDigest<N> {
   /// character ascii hexadecimal string, this will cause memory unsafety
   /// issues such as possible out-of-bounds access or buffer overflow issues.
   ///
-  /// Ensure that the input string is valid before using, or prefer the
-  /// [`Digest::from_str`] instead.
+  /// Ensure that the input string is valid before using, or prefer to call
+  /// `from_str` instead.
   ///
   /// # Examples
   ///
