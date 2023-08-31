@@ -3,4 +3,4 @@ authors = ["Matthew Rodusek"]
 language = "en"
 multilingual = false
 src = "."
-title = "No Name OS"
+title = "Untitled Rust OS"
