@@ -38,6 +38,25 @@ jobs:
       - name: Check manifest
         run: cargo check --verbose --workspace
 
+  deny:
+    name: Cargo Deny
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install toolchain
+        uses: ./.github/actions/rust-toolchain
+
+      - name: Install cargo-deny
+        run: |
+          cargo install --locked cargo-deny
+
+      - name: Check cargo-deny
+        run: |
+          cargo deny check
+
   clippy:
     name: Static Analysis
     runs-on: ubuntu-latest
