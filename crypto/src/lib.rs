@@ -283,6 +283,7 @@ impl<const N: usize> core::str::FromStr for FixedDigest<N> {
   ///
   /// ```rust
   /// # use crypto::FixedDigest;
+  /// # use core::str::FromStr;
   /// let sha = "invalid";
   /// let digest = FixedDigest::<32>::from_str(sha);
   ///
