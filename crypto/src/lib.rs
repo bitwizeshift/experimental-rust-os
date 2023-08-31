@@ -36,7 +36,7 @@ impl core::fmt::Display for ParseDigestError {
 
 impl core::fmt::Debug for ParseDigestError {
   fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-    <Self as core::fmt::Display>::fmt(&self, f)
+    <Self as core::fmt::Display>::fmt(self, f)
   }
 }
 
@@ -186,45 +186,6 @@ impl<const N: usize> FixedDigest<N> {
     result
   }
 
-  /// Constructs this Digest from a string representation of the digest,
-  /// with error checking.
-  ///
-  /// Returns a [`ParseDigestError`] on failure if the supplied string either
-  /// does not contain 64 characters, or if any of the digits are not valid
-  /// hexadecimal values.
-  ///
-  /// # Arguments
-  ///
-  /// * `s` - the string to parse
-  ///
-  /// # Examples
-  ///
-  /// Basic usage:
-  ///
-  /// ```rust
-  /// # use crypto::FixedDigest;
-  /// let sha = "invalid";
-  /// let digest = FixedDigest::<32>::from_str(sha);
-  ///
-  /// assert!(digest.is_err());
-  /// ```
-  pub fn from_str(s: &str) -> Result<Self, ParseDigestError> {
-    if s.len() != 2 * N {
-      return Err(ParseDigestError(DigestErrorKind::BadLength(s.len())));
-    }
-    let mut result = Self::zeroed();
-    let bytes = s.as_bytes();
-    for i in 0..N {
-      let c0 = bytes[i * 2];
-      let c1 = bytes[i * 2 + 1];
-
-      result.0[i] =
-        Self::hex_digit_to_u8(c0)? << 4 | Self::hex_digit_to_u8(c1)?;
-    }
-
-    Ok(result)
-  }
-
   /// Converts an 8-bit ascii hexadecimal value into its corresponding integer
   /// form without checking.
   ///
@@ -287,13 +248,61 @@ impl<const N: usize> FixedDigest<N> {
   pub fn iter(&self) -> impl Iterator<Item = &u8> {
     self.0.iter()
   }
+}
+
+impl<const N: usize> IntoIterator for FixedDigest<N> {
+  type Item = u8;
+  type IntoIter = core::array::IntoIter<u8, N>;
 
   /// Creates a consuming iterator, that is, one that moves each value out of
   /// the digest (from start to end). Since each value is a [`u8`] which
   /// satisfies [`Copy`], this mostly exists for APIs that expect values
   /// rather than references.
-  pub fn into_iter(self) -> impl IntoIterator<Item = u8> {
+  fn into_iter(self) -> Self::IntoIter {
     self.0.into_iter()
+  }
+}
+
+impl<const N: usize> core::str::FromStr for FixedDigest<N> {
+  type Err = ParseDigestError;
+
+  /// Constructs this [`FixedDigest`] from a string representation of the digest,
+  /// with error checking.
+  ///
+  /// Returns a [`ParseDigestError`] on failure if the supplied string either
+  /// does not contain 64 characters, or if any of the digits are not valid
+  /// hexadecimal values.
+  ///
+  /// # Arguments
+  ///
+  /// * `s` - the string to parse
+  ///
+  /// # Examples
+  ///
+  /// Basic usage:
+  ///
+  /// ```rust
+  /// # use crypto::FixedDigest;
+  /// let sha = "invalid";
+  /// let digest = FixedDigest::<32>::from_str(sha);
+  ///
+  /// assert!(digest.is_err());
+  /// ```
+  fn from_str(s: &str) -> Result<Self, Self::Err> {
+    if s.len() != 2 * N {
+      return Err(ParseDigestError(DigestErrorKind::BadLength(s.len())));
+    }
+    let mut result = Self::zeroed();
+    let bytes = s.as_bytes();
+    for i in 0..N {
+      let c0 = bytes[i * 2];
+      let c1 = bytes[i * 2 + 1];
+
+      result.0[i] =
+        Self::hex_digit_to_u8(c0)? << 4 | Self::hex_digit_to_u8(c1)?;
+    }
+
+    Ok(result)
   }
 }
 

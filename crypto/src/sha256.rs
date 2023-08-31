@@ -160,6 +160,12 @@ impl SHA256 {
     let mut g = self.hash[6];
     let mut h = self.hash[7];
 
+    // Clippy erroneously states that this is only used to index 'words', but it
+    // also is used to index Self::CONSTANTS as well.
+    // This could also be done with a zip range, but there is less guarantees on
+    // the generated code this compiles into, and it's cleaner to keep an index
+    // for the symmetry with the above loops.
+    #[allow(clippy::needless_range_loop)]
     for i in 0..64 {
       let s1 = Self::sigma1(e);
       let ch = Self::ch(e, f, g);
