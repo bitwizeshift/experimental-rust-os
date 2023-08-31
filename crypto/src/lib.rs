@@ -47,18 +47,18 @@ impl core::fmt::Debug for ParseDigestError {
 /// block-size. All `Hasher` objects must return a [`Hasher::Digest`] type,
 /// which encodes the binary representation of the hashed object.
 pub trait Hasher {
-  // Digest is the type of hash representation produced by a given Hasher
-  // implementation.
+  /// Digest is the type of hash representation produced by a given Hasher
+  /// implementation.
   type Digest;
 
-  // Updates the hasher to include the state of the specified `bytes`.
-  //
-  // # Arguments
-  //
-  // * `bytes` - the bytes to include in the hash
+  /// Updates the hasher to include the state of the specified `bytes`.
+  ///
+  /// # Arguments
+  ///
+  /// * `bytes` - the bytes to include in the hash
   fn update(&mut self, bytes: &[u8]);
 
-  // Produces a digest from the Hasher which represents the current hash state.
+  /// Produces a digest from the Hasher which represents the current hash state.
   fn digest(self) -> Self::Digest;
 }
 
