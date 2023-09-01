@@ -1,0 +1,12 @@
+[package]
+name = "bootloader"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "bootloader"
+path = "src/main.rs"
+
+[dependencies]
+uefi = "0.24.0"
+arch = {path="../arch"}
