@@ -1,12 +1,13 @@
 # Introduction
 
-**No Name OS** is an exploratory and hobby OS project written in [Rust] which
-aims to rethink the way Operating Systems work from its foundations.
+**Untitled Rust OS** is an exploratory and hobby OS project written in [Rust]
+which aims to rethink the way Operating Systems work from its foundations.
 
 ## Planned Features
 
-**Note:** This is largely a wish-list of what will be implemented, and is not
-necessarily implemented yet.
+**Note:** This is largely a brain-dump/wish-list of what will be implemented,
+and is not necessarily representative of what is, or will ever be, fully
+explored.
 
 * **Enhanced cryptographic-security**
   * **[Secure Boot]** from the Bootloader into the kernel.

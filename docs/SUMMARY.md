@@ -5,3 +5,4 @@
 # Features
 
 - [Binary Safety](./binary-safety.md)
+* [IPC](./ipc.md)
