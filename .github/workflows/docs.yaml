@@ -33,7 +33,7 @@ jobs:
       - name: Generate Cargo Docs
         run: |
           RUSTDOCFLAGS="--enable-index-page -Zunstable-options" \
-          cargo +nightly doc --no-deps
+          cargo +nightly doc --no-deps --workspace
 
       - name: Generate coverage report
         run: |
