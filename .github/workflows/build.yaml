@@ -157,7 +157,7 @@ jobs:
       - name: Generate Coverage Report
         id: report
         run: |
-          cargo llvm-cov --workspace --json --output-path ${{ env.OUTPUT_FILE }}
+          cargo llvm-cov --json --output-path ${{ env.OUTPUT_FILE }}
           echo "coverage=$(cat ${{ env.OUTPUT_FILE }})" >> "${GITHUB_OUTPUT}"
 
       - name: Check Coverage Requirement
