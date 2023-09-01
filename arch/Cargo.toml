@@ -1,0 +1,11 @@
+[package]
+name = "arch"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "arch"
+path = "src/lib.rs"
+crate-type = ["rlib"]
+
+[dependencies]

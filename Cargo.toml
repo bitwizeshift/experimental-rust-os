@@ -1,6 +1,10 @@
 [workspace]
 members = [
   "crypto",
+  "arch",
+]
+default-members = [
+  "crypto"
 ]
 
 # Profile settings below are to not require the "eh_personality" to be set.
