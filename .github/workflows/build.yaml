@@ -61,6 +61,10 @@ jobs:
     name: Static Analysis
     runs-on: ubuntu-latest
     continue-on-error: true
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -70,8 +74,23 @@ jobs:
         with:
           components: clippy
 
+      - name: Install required cargo
+        run: cargo install clippy-sarif sarif-fmt
+
       - name: Check clippy
-        run: cargo clippy --no-deps -- --deny clippy::all
+        run: |
+          cargo clippy                                                         \
+            --no-deps                                                          \
+            --message-format=json                                              \
+            -- --deny clippy::all                                              \
+            | clippy-sarif | tee rust-clippy-results.sarif | sarif-fmt
+        continue-on-error: true
+
+      - name: Upload analysis results to GitHub
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: rust-clippy-results.sarif
+          wait-for-processing: true
 
   doctest:
     name: Doctest
