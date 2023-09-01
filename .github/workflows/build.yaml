@@ -157,7 +157,7 @@ jobs:
       - name: Generate Coverage Report
         id: report
         run: |
-          cargo llvm-cov --json --output-path ${{ env.OUTPUT_FILE }}
+          cargo llvm-cov --workspace --json --output-path ${{ env.OUTPUT_FILE }}
           echo "coverage=$(cat ${{ env.OUTPUT_FILE }})" >> "${GITHUB_OUTPUT}"
 
       - name: Check Coverage Requirement
@@ -165,13 +165,16 @@ jobs:
           COVERAGE: ${{fromJson(steps.report.outputs.coverage).data[0].totals.lines.percent}}
         run: |
           if [[ ${{env.COVERAGE_MINIMUM}} > ${{env.COVERAGE}} ]]; then
-            echo "Error: Code coverage '${COVERAGE}%' is below this project's minimum '${COVERAGE_MINIMUM}%'!" >&2
+            echo "Error: Project code coverage fell below minimum desired '${COVERAGE_MINIMUM}%'!" >&2
+            echo "The current coverage is '${COVERAGE}%.'" >&2
+            echo "Please either add more tests, or lower the requirements." >&2
             exit 1
           fi
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         if: success() || failure()
+        continue-on-error: true
         with:
-          name: ${{env.OUTPUT_FILE}}
+          name: ${{matrix.os}}-codecov
           path: ${{env.OUTPUT_FILE}}

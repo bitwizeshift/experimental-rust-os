@@ -37,7 +37,7 @@ jobs:
 
       - name: Generate coverage report
         run: |
-          cargo llvm-cov --html
+          cargo llvm-cov --workspace --html
           cp -r target/llvm-cov/html target/doc/coverage
 
       - name: Upload Pages Artifact
