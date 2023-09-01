@@ -23,6 +23,8 @@ private.ignore = true
 allow = [
     "Apache-2.0",
     "MIT",
+    "Unicode-DFS-2016", # Needed transitively
+    "MPL-2.0", # Temporary: See #4
 ]
 
 # https://embarkstudios.github.io/cargo-deny/checks/sources/cfg.html
@@ -30,3 +32,12 @@ allow = [
 unknown-registry = "deny"
 unknown-git = "deny"
 allow-git = []
+
+[[bans.skip]]
+name = "uefi"
+
+[[bans.skip]]
+name = "uefi-macros"
+
+[[bans.skip]]
+name = "uefi-raw"

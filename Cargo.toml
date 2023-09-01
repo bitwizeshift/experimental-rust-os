@@ -8,6 +8,9 @@ default-members = [
   "crypto"
 ]
 
+[workspace.package]
+license = "MIT AND Apache-2.0"
+
 # Profile settings below are to not require the "eh_personality" to be set.
 [profile.dev]
 panic = "abort"
