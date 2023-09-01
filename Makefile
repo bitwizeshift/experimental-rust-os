@@ -59,6 +59,15 @@ build/${ARCH}/image/efi/boot/${BOOT_EFI}: target/${ARCH}-unknown-uefi/debug/boot
 bootloader: build/${ARCH}/image/efi/boot/${BOOT_EFI}
 
 ###############################################################################
+# Releasing
+###############################################################################
+
+# This will eventually be replaced with producing a bootable disk image.
+# For now, it simply produces a directory
+.PHONY: release
+release: bootloader
+
+###############################################################################
 # Testing
 ###############################################################################
 
