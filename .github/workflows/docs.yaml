@@ -19,7 +19,10 @@ jobs:
 
       - name: Install mdbook
         run: |
-          cargo install mdbook
+          cargo install --locked mdbook
+
+      - name: Install cargo-llvm-cov
+        uses: taiki-e/install-action@cargo-llvm-cov
 
       - name: Generate Book
         run: |
@@ -31,6 +34,11 @@ jobs:
         run: |
           RUSTDOCFLAGS="--enable-index-page -Zunstable-options" \
           cargo +nightly doc --no-deps
+
+      - name: Generate coverage report
+        run: |
+          cargo llvm-cov --html
+          cp -r target/llvm-cov/html target/doc/coverage
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v1
